@@ -1,11 +1,24 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { GraduationCap, MapPin, Mail, Phone } from "lucide-react";
+import profilePhoto from "@/assets/profile-photo.jpeg";
 
 const About = () => {
   return (
     <section id="about" className="section-padding bg-card/50">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold mb-12 text-center">About Me</h2>
+        
+        {/* Profile Photo */}
+        <div className="flex justify-center mb-12">
+          <div className="relative">
+            <img 
+              src={profilePhoto} 
+              alt="Omkar Thakur" 
+              className="w-64 h-64 rounded-full object-cover border-4 border-primary shadow-2xl"
+            />
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 pointer-events-none" />
+          </div>
+        </div>
         
         <div className="grid md:grid-cols-2 gap-8 items-start">
           {/* Bio */}
