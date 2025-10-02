@@ -1,15 +1,18 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { GraduationCap, MapPin, Mail, Phone } from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpeg";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const About = () => {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section id="about" className="section-padding bg-card/50">
+    <section id="about" className="section-padding bg-card/50" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">About Me</h2>
+        <h2 className={`text-4xl font-bold mb-12 text-center float-up ${isVisible ? 'visible' : ''}`}>About Me</h2>
         
         {/* Profile Photo */}
-        <div className="flex justify-center mb-12">
+        <div className={`flex justify-center mb-12 float-up stagger-1 ${isVisible ? 'visible' : ''}`}>
           <div className="relative">
             <img 
               src={profilePhoto} 
@@ -22,7 +25,7 @@ const About = () => {
         
         <div className="grid md:grid-cols-2 gap-8 items-start">
           {/* Bio */}
-          <Card className="card-glow bg-card border-border">
+          <Card className={`card-glow bg-card border-border slide-in-left stagger-2 ${isVisible ? 'visible' : ''}`}>
             <CardContent className="p-8">
               <h3 className="text-2xl font-semibold mb-4 text-primary">Background</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
@@ -40,7 +43,7 @@ const About = () => {
           
           {/* Quick Facts */}
           <div className="space-y-4">
-            <Card className="card-glow bg-card border-border">
+            <Card className={`card-glow bg-card border-border slide-in-right stagger-3 ${isVisible ? 'visible' : ''}`}>
               <CardContent className="p-6 flex items-center gap-4">
                 <GraduationCap className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
@@ -51,7 +54,7 @@ const About = () => {
               </CardContent>
             </Card>
             
-            <Card className="card-glow bg-card border-border">
+            <Card className={`card-glow bg-card border-border slide-in-right stagger-4 ${isVisible ? 'visible' : ''}`}>
               <CardContent className="p-6 flex items-center gap-4">
                 <MapPin className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
@@ -61,7 +64,7 @@ const About = () => {
               </CardContent>
             </Card>
             
-            <Card className="card-glow bg-card border-border">
+            <Card className={`card-glow bg-card border-border slide-in-right stagger-5 ${isVisible ? 'visible' : ''}`}>
               <CardContent className="p-6 flex items-center gap-4">
                 <Mail className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
@@ -71,7 +74,7 @@ const About = () => {
               </CardContent>
             </Card>
             
-            <Card className="card-glow bg-card border-border">
+            <Card className={`card-glow bg-card border-border slide-in-right stagger-6 ${isVisible ? 'visible' : ''}`}>
               <CardContent className="p-6 flex items-center gap-4">
                 <Phone className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>

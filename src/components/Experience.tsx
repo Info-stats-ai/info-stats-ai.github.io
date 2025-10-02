@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, Calendar } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const experiences = [
   {
@@ -42,14 +43,16 @@ const experiences = [
 ];
 
 const Experience = () => {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section id="experience" className="section-padding">
+    <section id="experience" className="section-padding" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">Experience</h2>
+        <h2 className={`text-4xl font-bold mb-12 text-center float-up ${isVisible ? 'visible' : ''}`}>Experience</h2>
         
         <div className="space-y-6">
           {experiences.map((exp, index) => (
-            <Card key={index} className="card-glow bg-card border-border">
+            <Card key={index} className={`card-glow bg-card border-border slide-in-left stagger-${index + 1} ${isVisible ? 'visible' : ''}`}>
               <CardHeader>
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>

@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const projects = [
   {
@@ -40,14 +41,16 @@ const projects = [
 ];
 
 const Projects = () => {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section id="projects" className="section-padding">
+    <section id="projects" className="section-padding" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">Featured Projects</h2>
+        <h2 className={`text-4xl font-bold mb-12 text-center float-up ${isVisible ? 'visible' : ''}`}>Featured Projects</h2>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <Card key={index} className="card-glow bg-card border-border flex flex-col">
+            <Card key={index} className={`card-glow bg-card border-border flex flex-col float-up stagger-${(index % 6) + 1} ${isVisible ? 'visible' : ''}`}>
               <CardHeader>
                 <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
                 <CardDescription className="text-muted-foreground">

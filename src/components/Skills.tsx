@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Code, Brain, Database, Wrench, Cloud, Eye } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const skillCategories = [
   {
@@ -36,14 +37,16 @@ const skillCategories = [
 ];
 
 const Skills = () => {
+  const { ref, isVisible } = useScrollAnimation();
+
   return (
-    <section id="skills" className="section-padding bg-card/50">
+    <section id="skills" className="section-padding bg-card/50" ref={ref}>
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold mb-12 text-center">Technical Skills</h2>
+        <h2 className={`text-4xl font-bold mb-12 text-center float-up ${isVisible ? 'visible' : ''}`}>Technical Skills</h2>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skillCategories.map((category, index) => (
-            <Card key={index} className="card-glow bg-card border-border">
+            <Card key={index} className={`card-glow bg-card border-border float-up stagger-${(index % 6) + 1} ${isVisible ? 'visible' : ''}`}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-3 text-xl">
                   <category.icon className="h-6 w-6 text-primary" />
