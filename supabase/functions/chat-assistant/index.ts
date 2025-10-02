@@ -12,7 +12,7 @@ Here is comprehensive information about Omkar:
 
 **Background:**
 - Currently pursuing Master's in Data Science at University of Maryland - College Park
-- Located in Maryland, USA
+- Located in California, USA
 - Contact: othakur@umd.edu, Phone: 602-668-0832
 - LinkedIn: https://www.linkedin.com/in/info-stats-ai/
 - GitHub: https://github.com/Info-stats-ai
@@ -59,30 +59,59 @@ AI Tools: LangGraph, CrewAI, Hugging Face, LLM Function Calling, Prompt Engineer
    - Built GPT-4 powered multi-agent system using CrewAI and Pydantic to extract and rank deals from RSS feeds, reducing manual effort by 90%
    - Custom RAG pipeline with Chroma DB and 3D embedding visualization
    - LLM + Random Forest ensemble model with real-time monitoring via Gradio
-   - 20% improvement in product similarity search accuracy, 15% reduction in price prediction error
+   - Metrics: 90% reduction in manual effort, 20% improvement in product similarity search accuracy, 15% reduction in price prediction error
+   - Skills Learned: Multi-Agent Systems, RAG Pipeline Design, Ensemble Learning, Real-time Monitoring
+   - Tools Used: GPT-4, CrewAI, Pydantic, Chroma DB, Random Forest, Gradio
 
 2. Phishing Detection - End-to-End ML Pipeline
    - Complete ML pipeline from ingestion to deployment with reproducible artifacts, logging, and monitoring
    - Schema validation and data-drift reporting with centralized logging
    - MLflow/DagsHub tracking with S3 artifact sync
    - FastAPI production inference with interactive docs, achieved 85% accuracy
+   - Metrics: 85% accuracy, Real-time inference capability, Full schema validation
+   - Skills Learned: ML Pipeline Development, MLOps Best Practices, Data Drift Detection, Production API Development
+   - Tools Used: MLflow, DagsHub, FastAPI, S3, Docker, Pytest
 
 3. CAF Bank AI Challenge
    - Scalable RAG pipeline with FAISS vector search and BlendFilter-enhanced retrieval
    - Dynamic API augmentation (DuckDuckGo, Wikipedia)
    - Accurate content generation for banking queries
+   - Skills Learned: RAG Pipeline Architecture, Vector Search Optimization, API Integration, Information Retrieval
+   - Tools Used: FAISS, BlendFilter Framework, DuckDuckGo API, Wikipedia API, LangChain
 
 **Additional GitHub Projects:**
-- YOLO Object Detection
-- Stable Diffusion implementation
-- Time Series Analysis for Auto Industry
-- ETL Pipeline with PostgreSQL and AWS
-- American Express ML prediction project
-- NLP tasks and sentiment analysis
-- Recommendation systems
-- Spotify business case study
-- Wine quality prediction
-- And many more ML/AI projects
+
+4. YOLO Object Detection
+   - Real-time object detection with high precision
+   - Skills: Computer Vision, Object Detection, Model Optimization
+   - Tools: YOLO, PyTorch, OpenCV
+
+5. Stable Diffusion Implementation
+   - High-quality image generation system
+   - Skills: Generative AI, Diffusion Models, Image Processing
+   - Tools: Stable Diffusion, PyTorch, Hugging Face
+
+6. Time Series Analysis for Auto Industry
+   - Predictive forecasting models
+   - Skills: Time Series Analysis, Statistical Forecasting
+   - Tools: ARIMA, Prophet, Pandas
+
+7. NLP Sentiment Analysis
+   - Multi-class sentiment classification
+   - Skills: Natural Language Processing, Text Classification
+   - Tools: BERT, Transformers, scikit-learn
+
+8. Recommendation Systems
+   - Collaborative filtering with personalized recommendations
+   - Skills: Recommendation Algorithms, Matrix Factorization
+   - Tools: Surprise, Pandas, NumPy
+
+9. ETL Pipeline with PostgreSQL and AWS
+   - Scalable data pipeline architecture
+   - Skills: ETL Design, Cloud Infrastructure, Database Management
+   - Tools: PostgreSQL, AWS S3, Apache Airflow
+
+And many more ML/AI projects covering various domains and techniques
 
 **Personal Characteristics:**
 - Passionate about pushing boundaries of AI while maintaining focus on practical, production-ready implementations

@@ -56,7 +56,7 @@ const About = () => {
                 <MapPin className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
                   <p className="font-semibold">Location</p>
-                  <p className="text-sm text-muted-foreground">Maryland, USA</p>
+                  <p className="text-sm text-muted-foreground">California, USA</p>
                 </div>
               </CardContent>
             </Card>
