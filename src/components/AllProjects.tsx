@@ -77,16 +77,6 @@ const allProjects: ProjectData[] = [
     tools: ["scikit-learn", "Flask", "Docker"]
   },
   {
-    title: "Forecasting with XGBoost & LLM",
-    description: "RAG fine-tuning and ML forecasting on Azure",
-    language: "Jupyter Notebook",
-    url: "https://github.com/Info-stats-ai/Forecasting_Using_XGboost_and_LLM",
-    updated: "Sep 12, 2025",
-    metrics: ["Hybrid model approach"],
-    skills: ["Ensemble Methods", "LLM Fine-tuning", "Cloud Deployment"],
-    tools: ["XGBoost", "LLMs", "Azure", "RAG"]
-  },
-  {
     title: "ETL Pipeline - PostGres AWS",
     description: "ETL pipeline using Apache Airflow with PostgreSQL and AWS",
     language: "Python",
@@ -177,7 +167,14 @@ const AllProjects = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {allProjects.map((project, index) => (
-            <Card key={index} className="card-glow bg-card border-border flex flex-col">
+            <Card 
+              key={index} 
+              className="card-glow bg-card border-border flex flex-col animate-fade-in opacity-0 hover-scale" 
+              style={{ 
+                animationDelay: `${index * 0.1}s`,
+                animationFillMode: 'forwards'
+              }}
+            >
               <CardHeader>
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <CardTitle className="text-lg line-clamp-2">{project.title}</CardTitle>

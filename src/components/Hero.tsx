@@ -20,13 +20,13 @@ const Hero = () => {
       
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 glow-text">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 glow-text typing-animation">
           Omkar Thakur
         </h1>
-        <p className="text-2xl md:text-3xl text-muted-foreground mb-4">
+        <p className="text-2xl md:text-3xl text-muted-foreground mb-4 fade-in-up" style={{ animationDelay: '1s' }}>
           Data Scientist & AI Engineer
         </p>
-        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto fade-in-up" style={{ animationDelay: '1.3s' }}>
           Master's in Data Science at University of Maryland. Building intelligent systems with Machine Learning, NLP, and Computer Vision.
         </p>
         
