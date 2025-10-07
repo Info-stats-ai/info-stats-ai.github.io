@@ -48,7 +48,7 @@ const About = () => {
                 <GraduationCap className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
                   <p className="font-semibold">Undergraduate Education</p>
-                  <p className="text-sm text-muted-foreground">B.Tech in Computer Science</p>
+                  <p className="text-sm text-muted-foreground">Bachelor Of Engineering</p>
                   <p className="text-sm text-muted-foreground">Delhi Technological University</p>
                   <p className="text-sm text-muted-foreground">Delhi, India (2017-2021)</p>
                 </div>
