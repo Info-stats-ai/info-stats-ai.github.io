@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, MapPin, Mail, Phone } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import profilePhoto from "@/assets/profile-photo.jpeg";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
@@ -47,39 +47,10 @@ const About = () => {
               <CardContent className="p-6 flex items-center gap-4">
                 <GraduationCap className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
-                  <p className="font-semibold">Education</p>
-                  <p className="text-sm text-muted-foreground">Master's in Data Science</p>
-                  <p className="text-sm text-muted-foreground">University of Maryland</p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className={`card-glow bg-card border-border slide-in-right stagger-4 ${isVisible ? 'visible' : ''}`}>
-              <CardContent className="p-6 flex items-center gap-4">
-                <MapPin className="h-8 w-8 text-primary flex-shrink-0" />
-                <div>
-                  <p className="font-semibold">Location</p>
-                  <p className="text-sm text-muted-foreground">California, USA</p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className={`card-glow bg-card border-border slide-in-right stagger-5 ${isVisible ? 'visible' : ''}`}>
-              <CardContent className="p-6 flex items-center gap-4">
-                <Mail className="h-8 w-8 text-primary flex-shrink-0" />
-                <div>
-                  <p className="font-semibold">Email</p>
-                  <p className="text-sm text-muted-foreground break-all">othakur@umd.edu</p>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className={`card-glow bg-card border-border slide-in-right stagger-6 ${isVisible ? 'visible' : ''}`}>
-              <CardContent className="p-6 flex items-center gap-4">
-                <Phone className="h-8 w-8 text-primary flex-shrink-0" />
-                <div>
-                  <p className="font-semibold">Phone</p>
-                  <p className="text-sm text-muted-foreground">602-668-0832</p>
+                  <p className="font-semibold">Undergraduate Education</p>
+                  <p className="text-sm text-muted-foreground">B.Tech in Computer Science</p>
+                  <p className="text-sm text-muted-foreground">Delhi Technological University</p>
+                  <p className="text-sm text-muted-foreground">Delhi, India (2017-2021)</p>
                 </div>
               </CardContent>
             </Card>
