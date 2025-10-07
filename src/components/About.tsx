@@ -47,6 +47,17 @@ const About = () => {
               <CardContent className="p-6 flex items-center gap-4">
                 <GraduationCap className="h-8 w-8 text-primary flex-shrink-0" />
                 <div>
+                  <p className="font-semibold">Graduate Education</p>
+                  <p className="text-sm text-muted-foreground">Master's in Data Science</p>
+                  <p className="text-sm text-muted-foreground">University of Maryland</p>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className={`card-glow bg-card border-border slide-in-right stagger-4 ${isVisible ? 'visible' : ''}`}>
+              <CardContent className="p-6 flex items-center gap-4">
+                <GraduationCap className="h-8 w-8 text-primary flex-shrink-0" />
+                <div>
                   <p className="font-semibold">Undergraduate Education</p>
                   <p className="text-sm text-muted-foreground">Bachelor Of Engineering</p>
                   <p className="text-sm text-muted-foreground">Delhi Technological University</p>
