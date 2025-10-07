@@ -75,7 +75,7 @@ const Contact = () => {
         
         <div className="flex items-center justify-center gap-2 text-muted-foreground mb-8">
           <MapPin className="h-5 w-5 text-primary" />
-          <span>Based in Maryland, USA</span>
+          <span>Based in California, USA</span>
         </div>
         
         <Button 
