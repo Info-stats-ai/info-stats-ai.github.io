@@ -6,15 +6,138 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const systemPrompt = `You are Omkar speaking directly. Respond in FIRST PERSON ("I", "my") as if Omkar is personally replying.
+const GITHUB_USERNAME = 'Info-stats-ai';
+
+interface RepoInfo {
+  name: string;
+  description: string;
+  url: string;
+  readme: string;
+  language: string;
+}
+
+async function fetchGitHubRepos(githubToken: string): Promise<RepoInfo[]> {
+  try {
+    console.log('Fetching GitHub repos...');
+    const reposResponse = await fetch(
+      `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
+      {
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Lovable-Portfolio-Bot'
+        }
+      }
+    );
+
+    if (!reposResponse.ok) {
+      console.error('GitHub API error:', reposResponse.status);
+      return [];
+    }
+
+    const repos = await reposResponse.json();
+    console.log(`Found ${repos.length} repos`);
+
+    const repoInfos: RepoInfo[] = [];
+
+    for (const repo of repos.slice(0, 20)) { // Limit to 20 most recent repos
+      try {
+        const readmeResponse = await fetch(
+          `https://api.github.com/repos/${GITHUB_USERNAME}/${repo.name}/readme`,
+          {
+            headers: {
+              'Authorization': `Bearer ${githubToken}`,
+              'Accept': 'application/vnd.github.v3.raw',
+              'User-Agent': 'Lovable-Portfolio-Bot'
+            }
+          }
+        );
+
+        let readme = '';
+        if (readmeResponse.ok) {
+          readme = await readmeResponse.text();
+          console.log(`Fetched README for ${repo.name} (${readme.length} chars)`);
+        }
+
+        repoInfos.push({
+          name: repo.name,
+          description: repo.description || '',
+          url: repo.html_url,
+          readme: readme.substring(0, 3000), // Limit README length
+          language: repo.language || 'Unknown'
+        });
+      } catch (error) {
+        console.error(`Error fetching README for ${repo.name}:`, error);
+      }
+    }
+
+    return repoInfos;
+  } catch (error) {
+    console.error('Error fetching GitHub data:', error);
+    return [];
+  }
+}
+
+function searchRelevantRepos(query: string, repos: RepoInfo[]): RepoInfo[] {
+  const queryLower = query.toLowerCase();
+  const keywords = queryLower.split(' ').filter(word => word.length > 3);
+
+  const scored = repos.map(repo => {
+    let score = 0;
+    const searchText = `${repo.name} ${repo.description} ${repo.readme}`.toLowerCase();
+
+    // Exact matches in name or description get highest score
+    if (repo.name.toLowerCase().includes(queryLower)) score += 10;
+    if (repo.description.toLowerCase().includes(queryLower)) score += 8;
+
+    // Keyword matches
+    keywords.forEach(keyword => {
+      const matches = (searchText.match(new RegExp(keyword, 'g')) || []).length;
+      score += matches;
+    });
+
+    return { repo, score };
+  });
+
+  return scored
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3) // Top 3 most relevant repos
+    .map(item => item.repo);
+}
+
+function buildContextFromRepos(repos: RepoInfo[]): string {
+  if (repos.length === 0) {
+    return "No specific repository information found for this query.";
+  }
+
+  let context = "\n\nRELEVANT REPOSITORY INFORMATION:\n\n";
+  
+  repos.forEach((repo, index) => {
+    context += `${index + 1}. **${repo.name}**\n`;
+    context += `   URL: ${repo.url}\n`;
+    if (repo.description) context += `   Description: ${repo.description}\n`;
+    if (repo.language) context += `   Language: ${repo.language}\n`;
+    if (repo.readme) {
+      context += `   README Content:\n${repo.readme.substring(0, 1000)}\n`;
+    }
+    context += '\n';
+  });
+
+  return context;
+}
+
+const basePrompt = `You are Omkar speaking directly. Respond in FIRST PERSON ("I", "my") as if Omkar is personally replying.
 
 CRITICAL RULES:
 - Maximum 4-5 lines per response, be crisp and direct
+- Use the repository information provided to give accurate, specific answers about my projects
 - Only answer questions about: my background, education, work, skills, projects, or career
 - If asked ANYTHING unrelated (weather, jokes, general knowledge, cooking, sports, etc.), respond EXACTLY: "I'd prefer to talk about my work and experience. What would you like to know about my projects or skills?"
 - Always speak as "I" - you ARE Omkar
-- NEVER make up information not in this prompt
+- NEVER make up information not in this prompt or the repository data
 - If you don't know something, say "I don't have that information in my background. Feel free to ask about my projects or skills!"
+- When mentioning specific projects, include the GitHub URL if available
 
 About me:
 I'm based in California, currently pursuing my Master's in Data Science at University of Maryland. I previously worked at The Builder Market as an AI intern (summer 2025) where I built production chatbots with hybrid search, and at UMD as a Graduate Assistant developing RAG systems. Before that, I co-founded Kamdhenu Robotics in India (2021-2023), building object detection and NLP systems for industrial robots.
@@ -24,15 +147,7 @@ My technical stack: Python, Java, SQL, R, JavaScript/TypeScript, Machine Learnin
 My experience:
 - The Builder Market (AI Intern, June-Aug 2025): Built production chatbots with hybrid search using React, Express, MongoDB, NestJS, OpenSearch. Implemented TypeScript fallbacks to avoid hallucinations. Used XGBoost+LLM for forecasting on EC2/S3.
 - University of Maryland (Graduate Assistant, June-Aug 2025): Built local RAG system for PDF/text querying with strict privacy. Used custom Genetic Loop architecture, Chain-of-Thought, Blendfilter Framework, and PEFT fine-tuning.
-- Kamdhenu Robotics (Co-Founder, June 2021-July 2023): Developed object-detection pipelines with Detectron2, Mask R-CNN, Cascade R-CNN. Built NLP/speech interfaces for robot control. Implemented CI/CD with Gazebo in GitHub Actions.
-
-Key projects:
-1. Multi-Agent Deal Discovery: GPT-4 powered system with CrewAI and Pydantic. Custom RAG with Chroma DB, 20% better similarity search, 15% less price error, 90% less manual effort.
-2. Phishing Detection Pipeline: End-to-end ML with schema validation, MLflow/DagsHub tracking, S3 sync, FastAPI deployment, Docker, 85% accuracy.
-3. CAF Bank AI Challenge: Scalable RAG with FAISS, BlendFilter retrieval, DuckDuckGo/Wikipedia API augmentation for banking queries.
-4. YOLO Object Detection: Real-time detection with YOLOv8, custom dataset training, performance optimization.
-
-REMEMBER: If the question is not about my work, education, skills, projects, or career, redirect politely. Never invent facts.`;
+- Kamdhenu Robotics (Co-Founder, June 2021-July 2023): Developed object-detection pipelines with Detectron2, Mask R-CNN, Cascade R-CNN. Built NLP/speech interfaces for robot control. Implemented CI/CD with Gazebo in GitHub Actions.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -42,10 +157,28 @@ serve(async (req) => {
   try {
     const { message } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    const GITHUB_TOKEN = Deno.env.get('GITHUB_TOKEN');
     
     if (!LOVABLE_API_KEY) {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
+
+    if (!GITHUB_TOKEN) {
+      console.warn('GITHUB_TOKEN not configured, will respond without repo context');
+    }
+
+    console.log('User query:', message);
+
+    // Fetch and search GitHub repos for relevant context
+    let repoContext = '';
+    if (GITHUB_TOKEN) {
+      const repos = await fetchGitHubRepos(GITHUB_TOKEN);
+      const relevantRepos = searchRelevantRepos(message, repos);
+      repoContext = buildContextFromRepos(relevantRepos);
+      console.log(`Found ${relevantRepos.length} relevant repos`);
+    }
+
+    const systemPrompt = basePrompt + repoContext;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
