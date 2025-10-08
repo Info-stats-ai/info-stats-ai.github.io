@@ -1,4 +1,4 @@
-import { ArrowRight, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -31,7 +31,7 @@ const Hero = () => {
         </p>
         
         {/* CTA Buttons */}
-        <div className="flex flex-wrap gap-4 justify-center mb-12">
+        <div className="flex flex-wrap gap-4 justify-center">
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
@@ -47,32 +47,6 @@ const Hero = () => {
           >
             Get In Touch
           </Button>
-        </div>
-        
-        {/* Social Links */}
-        <div className="flex gap-6 justify-center">
-          <a 
-            href="https://github.com/Info-stats-ai" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            <Github className="h-6 w-6" />
-          </a>
-          <a 
-            href="https://www.linkedin.com/in/info-stats-ai/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            <Linkedin className="h-6 w-6" />
-          </a>
-          <a 
-            href="mailto:othakur@umd.edu"
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            <Mail className="h-6 w-6" />
-          </a>
         </div>
       </div>
       

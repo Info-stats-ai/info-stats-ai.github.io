@@ -27,7 +27,7 @@ const projects = [
       "Docker deployment with 85% accuracy"
     ],
     tags: ["Python", "FastAPI", "MLflow", "Docker", "S3", "Scikit-Learn"],
-    url: "https://github.com/Info-stats-ai/Phishing-Detection-Pipeline"
+    url: "https://github.com/Info-stats-ai/Phishing-Detection"
   },
   {
     title: "CAF Bank AI Challenge",
@@ -39,7 +39,7 @@ const projects = [
       "Accurate content generation for banking queries"
     ],
     tags: ["RAG", "FAISS", "LangChain", "NLP", "API Integration"],
-    url: "https://github.com/Info-stats-ai/CAF-Bank-AI-Challenge"
+    url: "https://github.com/Info-stats-ai/CAF-Bank-AI"
   }
 ];
 
