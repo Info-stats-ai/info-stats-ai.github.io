@@ -14,7 +14,8 @@ const projects = [
       "20% improvement in product similarity search accuracy",
       "15% reduction in price prediction error"
     ],
-    tags: ["GPT-4", "CrewAI", "Pydantic", "RAG", "Chroma DB", "Modal", "Gradio"]
+    tags: ["GPT-4", "CrewAI", "Pydantic", "RAG", "Chroma DB", "Modal", "Gradio"],
+    url: "https://github.com/Info-stats-ai/Multi-Agent-LLM-Deal-Discovery"
   },
   {
     title: "Phishing Detection - End-to-End ML Pipeline",
@@ -25,7 +26,8 @@ const projects = [
       "FastAPI production inference with interactive docs",
       "Docker deployment with 85% accuracy"
     ],
-    tags: ["Python", "FastAPI", "MLflow", "Docker", "S3", "Scikit-Learn"]
+    tags: ["Python", "FastAPI", "MLflow", "Docker", "S3", "Scikit-Learn"],
+    url: "https://github.com/Info-stats-ai/Phishing-Detection-Pipeline"
   },
   {
     title: "CAF Bank AI Challenge",
@@ -36,7 +38,8 @@ const projects = [
       "Dynamic API augmentation (DuckDuckGo, Wikipedia)",
       "Accurate content generation for banking queries"
     ],
-    tags: ["RAG", "FAISS", "LangChain", "NLP", "API Integration"]
+    tags: ["RAG", "FAISS", "LangChain", "NLP", "API Integration"],
+    url: "https://github.com/Info-stats-ai/CAF-Bank-AI-Challenge"
   }
 ];
 
@@ -50,9 +53,16 @@ const Projects = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <Card key={index} className={`card-glow bg-card border-border flex flex-col float-up stagger-${(index % 6) + 1} ${isVisible ? 'visible' : ''}`}>
+            <Card 
+              key={index} 
+              className={`card-glow bg-card border-border flex flex-col float-up stagger-${(index % 6) + 1} ${isVisible ? 'visible' : ''} cursor-pointer hover:border-primary/50 transition-colors`}
+              onClick={() => window.open(project.url, '_blank')}
+            >
               <CardHeader>
-                <CardTitle className="text-xl mb-2">{project.title}</CardTitle>
+                <CardTitle className="text-xl mb-2 flex items-center gap-2">
+                  {project.title}
+                  <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                </CardTitle>
                 <CardDescription className="text-muted-foreground">
                   {project.description}
                 </CardDescription>

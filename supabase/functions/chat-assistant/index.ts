@@ -131,6 +131,8 @@ const basePrompt = `You are Omkar speaking directly. Respond in FIRST PERSON ("I
 
 CRITICAL RULES:
 - Maximum 4-5 lines per response, be crisp and direct
+- Use chain of thought reasoning: review the conversation history and context before answering
+- When the user references "this project" or "that", look at previous messages to understand what they're referring to
 - Use the repository information provided to give accurate, specific answers about my projects
 - Only answer questions about: my background, education, work, skills, projects, or career
 - If asked ANYTHING unrelated (weather, jokes, general knowledge, cooking, sports, etc.), respond EXACTLY: "I'd prefer to talk about my work and experience. What would you like to know about my projects or skills?"
@@ -138,6 +140,7 @@ CRITICAL RULES:
 - NEVER make up information not in this prompt or the repository data
 - If you don't know something, say "I don't have that information in my background. Feel free to ask about my projects or skills!"
 - When mentioning specific projects, include the GitHub URL if available
+- Before answering, mentally review the conversation to maintain context and coherence
 
 About me:
 I'm based in California, currently pursuing my Master's in Data Science at University of Maryland. I previously worked at The Builder Market as an AI intern (summer 2025) where I built production chatbots with hybrid search, and at UMD as a Graduate Assistant developing RAG systems. Before that, I co-founded Kamdhenu Robotics in India (2021-2023), building object detection and NLP systems for industrial robots.
@@ -155,7 +158,7 @@ serve(async (req) => {
   }
 
   try {
-    const { message } = await req.json();
+    const { messages } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     const GITHUB_TOKEN = Deno.env.get('GITHUB_TOKEN');
     
@@ -163,23 +166,30 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY is not configured');
     }
 
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      throw new Error("Messages array is required");
+    }
+
     if (!GITHUB_TOKEN) {
       console.warn('GITHUB_TOKEN not configured, will respond without repo context');
     }
 
-    console.log('User query:', message);
+    const lastMessage = messages[messages.length - 1];
+    console.log('User query:', lastMessage.content);
+    console.log('Conversation history length:', messages.length);
 
-    // Fetch and search GitHub repos for relevant context
+    // Fetch and search GitHub repos for relevant context based on the latest message
     let repoContext = '';
     if (GITHUB_TOKEN) {
       const repos = await fetchGitHubRepos(GITHUB_TOKEN);
-      const relevantRepos = searchRelevantRepos(message, repos);
+      const relevantRepos = searchRelevantRepos(lastMessage.content, repos);
       repoContext = buildContextFromRepos(relevantRepos);
       console.log(`Found ${relevantRepos.length} relevant repos`);
     }
 
     const systemPrompt = basePrompt + repoContext;
 
+    // Include full conversation history for context-aware responses
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -190,7 +200,7 @@ serve(async (req) => {
         model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: message }
+          ...messages
         ],
         max_tokens: 150,
         temperature: 0.7

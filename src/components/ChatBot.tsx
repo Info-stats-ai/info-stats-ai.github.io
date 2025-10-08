@@ -39,7 +39,7 @@ const ChatBot = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke('chat-assistant', {
-        body: { message: userMessage }
+        body: { messages: [...messages, { role: 'user', content: userMessage }] }
       });
 
       if (error) throw error;
