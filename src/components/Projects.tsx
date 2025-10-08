@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, Github } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const projects = [
@@ -14,8 +14,7 @@ const projects = [
       "20% improvement in product similarity search accuracy",
       "15% reduction in price prediction error"
     ],
-    tags: ["GPT-4", "CrewAI", "Pydantic", "RAG", "Chroma DB", "Modal", "Gradio"],
-    url: "https://github.com/Info-stats-ai/Multi-Agent-LLM-Deal-Discovery"
+    tags: ["GPT-4", "CrewAI", "Pydantic", "RAG", "Chroma DB", "Modal", "Gradio"]
   },
   {
     title: "Phishing Detection - End-to-End ML Pipeline",
@@ -26,8 +25,7 @@ const projects = [
       "FastAPI production inference with interactive docs",
       "Docker deployment with 85% accuracy"
     ],
-    tags: ["Python", "FastAPI", "MLflow", "Docker", "S3", "Scikit-Learn"],
-    url: "https://github.com/Info-stats-ai/Phishing-Detection"
+    tags: ["Python", "FastAPI", "MLflow", "Docker", "S3", "Scikit-Learn"]
   },
   {
     title: "CAF Bank AI Challenge",
@@ -38,8 +36,7 @@ const projects = [
       "Dynamic API augmentation (DuckDuckGo, Wikipedia)",
       "Accurate content generation for banking queries"
     ],
-    tags: ["RAG", "FAISS", "LangChain", "NLP", "API Integration"],
-    url: "https://github.com/Info-stats-ai/CAF-Bank-AI"
+    tags: ["RAG", "FAISS", "LangChain", "NLP", "API Integration"]
   }
 ];
 
@@ -55,13 +52,11 @@ const Projects = () => {
           {projects.map((project, index) => (
             <Card 
               key={index} 
-              className={`card-glow bg-card border-border flex flex-col float-up stagger-${(index % 6) + 1} ${isVisible ? 'visible' : ''} cursor-pointer hover:border-primary/50 transition-colors`}
-              onClick={() => window.open(project.url, '_blank')}
+              className={`card-glow bg-card border-border flex flex-col float-up stagger-${(index % 6) + 1} ${isVisible ? 'visible' : ''}`}
             >
               <CardHeader>
-                <CardTitle className="text-xl mb-2 flex items-center gap-2">
+                <CardTitle className="text-xl mb-2">
                   {project.title}
-                  <ExternalLink className="h-4 w-4 text-muted-foreground" />
                 </CardTitle>
                 <CardDescription className="text-muted-foreground">
                   {project.description}
