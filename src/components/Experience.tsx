@@ -22,10 +22,9 @@ const experiences = [
     location: "Maryland, USA",
     period: "June 2025 - August 2025",
     highlights: [
-      "Developed local RAG system for querying PDF/text files offline with strict data privacy requirements",
-      "Implemented multi-stage reasoning pipeline using custom Genetic Loop architecture",
-      "Utilized Chain-of-Thought (CoT) and Blendfilter Framework for enhanced retrieval",
-      "Fine-tuned with PEFT for efficient handling of millions of files with personalized answers"
+      "Developed OpenTSLM, a novel time-series language model integrating multimodal medical data (ECG, EEG, accelerometer) with Llama 3.2 LLMs, enabling natural language reasoning over clinical time-series data for automated ECG interpretation, sleep staging, and activity recognition with chain-of-thought explainability",
+      "Architected and implemented a 5-stage curriculum learning pipeline with automated checkpoint management and progressive training across TSQA, M4, HAR, SleepEDF, and ECG-QA datasets, achieving end-to-end model training with gradient checkpointing for memory optimization on CUDA/MPS hardware",
+      "Built a comprehensive clinician evaluation system with automated Excel-based review workflows for 84 ECG cases, enabling multi-reviewer assessment of AI-generated medical interpretations across pattern recognition, clinical reasoning, and context integration dimensions with inter-rater reliability metrics"
     ]
   },
   {
