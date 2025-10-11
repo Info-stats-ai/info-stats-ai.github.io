@@ -106,12 +106,18 @@ function searchRelevantRepos(query: string, repos: RepoInfo[]): RepoInfo[] {
     .map(item => item.repo);
 }
 
-function buildContextFromRepos(repos: RepoInfo[]): string {
+function buildContextFromRepos(repos: RepoInfo[], totalCount?: number): string {
   if (repos.length === 0) {
     return "No specific repository information found for this query.";
   }
 
-  let context = "\n\nRELEVANT REPOSITORY INFORMATION:\n\n";
+  let context = "\n\n=== GITHUB REPOSITORY DATA ===\n\n";
+  
+  if (totalCount !== undefined) {
+    context += `TOTAL PUBLIC REPOSITORIES ON GITHUB: ${totalCount}\n\n`;
+  }
+  
+  context += "REPOSITORY DETAILS:\n\n";
   
   repos.forEach((repo, index) => {
     context += `${index + 1}. **${repo.name}**\n`;
@@ -133,12 +139,14 @@ CRITICAL RULES:
 - Maximum 4-5 lines per response, be crisp and direct
 - Use chain of thought reasoning: review the conversation history and context before answering
 - Handle misspellings and grammatically incorrect questions - understand the user's intent and respond naturally
+- When asked about repository counts, GitHub repos, or project lists, ALWAYS use the exact data from "GITHUB REPOSITORY DATA" section below
+- If "TOTAL PUBLIC REPOSITORIES ON GITHUB" is provided, use that exact number when asked about repo count
 - For questions about my work, projects, or experience, use the repository information and context provided to give accurate, detailed answers
 - For general questions like "summarize your work", "tell me about projects", "what have you done", provide a comprehensive overview using ALL the information below
 - When the user references "this project" or "that", look at previous messages to understand what they're referring to
 - Answer ALL questions naturally and helpfully, whether they're about my work or general topics
 - Always speak as "I" - you ARE Omkar
-- For work-related questions, prioritize information from this prompt and the repository data - NEVER make up project details
+- NEVER make up or guess repository counts or project names - only use the data provided in the context
 - When mentioning specific projects, include the GitHub URL if available
 - Before answering, mentally review the conversation to maintain context and coherence
 
@@ -189,21 +197,34 @@ serve(async (req) => {
     let repoContext = '';
     if (GITHUB_TOKEN) {
       const repos = await fetchGitHubRepos(GITHUB_TOKEN);
+      const totalRepoCount = repos.length;
+      console.log(`Total repos available: ${totalRepoCount}`);
+      
+      const queryLower = lastMessage.content.toLowerCase();
+      
+      // Check if asking about repo count or listing all repos
+      const countKeywords = ['how many', 'kitne', 'total', 'number of', 'count'];
+      const listKeywords = ['all repo', 'list', 'sabhi', 'sara', 'github pr kya'];
+      
+      const isCountQuestion = countKeywords.some(keyword => queryLower.includes(keyword));
+      const isListQuestion = listKeywords.some(keyword => queryLower.includes(keyword));
       
       // Check if this is a general question that doesn't need specific repos
       const generalKeywords = ['summarize', 'summary', 'tell me about', 'what have', 'your work', 'your projects', 'overview', 'experience'];
-      const isGeneralQuestion = generalKeywords.some(keyword => 
-        lastMessage.content.toLowerCase().includes(keyword)
-      );
+      const isGeneralQuestion = generalKeywords.some(keyword => queryLower.includes(keyword));
       
-      if (isGeneralQuestion) {
-        // For general questions, provide context from all repos or top repos
+      if (isCountQuestion || isListQuestion) {
+        // For count/list questions, provide all repos with total count
+        console.log('Count/list question detected, including all repos');
+        repoContext = buildContextFromRepos(repos, totalRepoCount);
+      } else if (isGeneralQuestion) {
+        // For general questions, provide context from top repos
         console.log('General question detected, including broader context');
-        repoContext = buildContextFromRepos(repos.slice(0, 5));
+        repoContext = buildContextFromRepos(repos.slice(0, 5), totalRepoCount);
       } else {
         // For specific questions, search for relevant repos
         const relevantRepos = searchRelevantRepos(lastMessage.content, repos);
-        repoContext = buildContextFromRepos(relevantRepos);
+        repoContext = buildContextFromRepos(relevantRepos, totalRepoCount);
         console.log(`Found ${relevantRepos.length} relevant repos`);
       }
     }
