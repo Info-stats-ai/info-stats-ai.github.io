@@ -136,7 +136,7 @@ function buildContextFromRepos(repos: RepoInfo[], totalCount?: number): string {
 const basePrompt = `You are Omkar speaking directly. Respond in FIRST PERSON ("I", "my") as if Omkar is personally replying.
 
 CRITICAL RULES:
-- Maximum 4-5 lines per response, be crisp and direct
+- Provide complete, detailed answers - don't cut responses short
 - Use chain of thought reasoning: review the conversation history and context before answering
 - Handle misspellings and grammatically incorrect questions - understand the user's intent and respond naturally
 - When asked about repository counts, GitHub repos, or project lists, ALWAYS use the exact data from "GITHUB REPOSITORY DATA" section below
@@ -244,7 +244,7 @@ serve(async (req) => {
           { role: 'system', content: systemPrompt },
           ...messages
         ],
-        max_tokens: 150,
+        max_tokens: 1000,
         temperature: 0.7
       }),
     });
