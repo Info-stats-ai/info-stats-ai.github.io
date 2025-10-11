@@ -245,7 +245,8 @@ serve(async (req) => {
           ...messages
         ],
         max_tokens: 1000,
-        temperature: 0.7
+        temperature: 0.7,
+        stream: true
       }),
     });
 
@@ -255,13 +256,10 @@ serve(async (req) => {
       throw new Error(`AI gateway error: ${response.status}`);
     }
 
-    const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
-
-    return new Response(
-      JSON.stringify({ response: aiResponse }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+    // Return the streaming response directly
+    return new Response(response.body, {
+      headers: { ...corsHeaders, 'Content-Type': 'text/event-stream' }
+    });
   } catch (error) {
     console.error('Error in chat-assistant function:', error);
     return new Response(
