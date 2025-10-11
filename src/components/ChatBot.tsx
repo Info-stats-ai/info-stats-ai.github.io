@@ -38,6 +38,7 @@ const ChatBot = () => {
     setIsLoading(true);
 
     try {
+      console.log('Sending message:', userMessage);
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat-assistant`,
         {
@@ -52,8 +53,11 @@ const ChatBot = () => {
         }
       );
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok || !response.body) {
-        throw new Error('Failed to get response');
+        throw new Error(`Failed to get response: ${response.status}`);
       }
 
       const reader = response.body.getReader();
@@ -64,9 +68,14 @@ const ChatBot = () => {
       // Add empty assistant message that we'll update
       setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
 
+      let chunkCount = 0;
+
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) {
+          console.log('Stream complete. Total chunks:', chunkCount);
+          break;
+        }
 
         textBuffer += decoder.decode(value, { stream: true });
 
@@ -80,24 +89,34 @@ const ChatBot = () => {
           if (!line.startsWith('data: ')) continue;
 
           const jsonStr = line.slice(6).trim();
-          if (jsonStr === '[DONE]') break;
+          if (jsonStr === '[DONE]') {
+            console.log('Received [DONE] signal');
+            break;
+          }
 
           try {
             const parsed = JSON.parse(jsonStr);
             const content = parsed.choices?.[0]?.delta?.content;
             if (content) {
+              chunkCount++;
               assistantMessage += content;
+              console.log(`Chunk ${chunkCount}:`, content);
+              
+              // Update the last message with accumulated content
               setMessages(prev => {
                 const newMessages = [...prev];
-                newMessages[newMessages.length - 1] = {
-                  role: 'assistant',
-                  content: assistantMessage
-                };
+                const lastIndex = newMessages.length - 1;
+                if (lastIndex >= 0 && newMessages[lastIndex].role === 'assistant') {
+                  newMessages[lastIndex] = {
+                    role: 'assistant',
+                    content: assistantMessage
+                  };
+                }
                 return newMessages;
               });
             }
           } catch (e) {
-            // Incomplete JSON, put it back
+            console.warn('Failed to parse JSON, buffering:', e);
             textBuffer = line + '\n' + textBuffer;
             break;
           }
@@ -115,9 +134,11 @@ const ChatBot = () => {
       });
       setMessages(prev => {
         const newMessages = [...prev];
-        if (newMessages[newMessages.length - 1].role === 'assistant' && 
-            newMessages[newMessages.length - 1].content === '') {
-          newMessages[newMessages.length - 1] = {
+        const lastIndex = newMessages.length - 1;
+        if (lastIndex >= 0 && 
+            newMessages[lastIndex].role === 'assistant' && 
+            newMessages[lastIndex].content === '') {
+          newMessages[lastIndex] = {
             role: 'assistant',
             content: "Sorry, I encountered an error. Please try again."
           };
